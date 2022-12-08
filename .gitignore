@@ -1,6 +1,6 @@
 # Visual Studio 2015/2017 cache/options directory
 .vs/
-EdgeConfigFile.json
+SmartConnector/EdgeConfigFile.json
 SmartConnector/bin
 SmartConnector/bin
 SmartConnector/obj

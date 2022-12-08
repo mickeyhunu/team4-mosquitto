@@ -79,13 +79,6 @@ namespace SmartConnector.Edukit
                 }
                 return Task.FromResult(true);
             }
-
-#if socketmode
-            private void ServerSocket_Unhandled(string arg1, object[] arg2)     //필요 없을지도?
-            {
-                ServerSocket.Emit("joinRoom", edgeConfigResult.EdukitId);
-            }
-#endif
             private void ConnectionStart(int DelayTime, XGTClass xGTClass, string ip, int port)
             {
                 xGTClass.Connect(ip, port);

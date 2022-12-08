@@ -61,7 +61,7 @@ namespace SmartConnector.Edukit
 
             //RX 응답 중 19번째가지는 헤더프레임 정보, 20번째부터 데이터 프레임.
             //받은 응답이 없으면, 즉 에러가 발생시 
-            if (RX.Length == 0)
+            if (RX.Length < 30)
             {
                 NAK_ErrorCotent = "서버로 부터 응답을 받지 못했습니다.";
                 return;

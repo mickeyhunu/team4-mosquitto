@@ -355,6 +355,7 @@ namespace SmartConnector.Edukit
             finally
             {
                 vData.MakeData();
+                Delay(10);
             }
             return vData;
         }

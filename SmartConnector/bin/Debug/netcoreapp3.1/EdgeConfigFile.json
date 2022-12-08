@@ -1,7 +1,9 @@
+// MQTT EdgeConfigFile.json
 {
   "EdukitId": "myEdukit",
   "EdukitIP": "192.168.0.120",
   "EdukitPort": "2004",
+  "FrontId":  "myFront",
   "MqttBrokerIP": "localhost",
   "MqttBrokerPort": "1883",
   "WebSocketServerUrl": "",

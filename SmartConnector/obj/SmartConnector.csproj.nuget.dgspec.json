@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\FlexingEdukit\\SmartConnector\\SmartConnector.csproj": {}
+    "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\SmartConnector\\SmartConnector.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\FlexingEdukit\\SmartConnector\\SmartConnector.csproj": {
+    "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\SmartConnector\\SmartConnector.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\FlexingEdukit\\SmartConnector\\SmartConnector.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\SmartConnector\\SmartConnector.csproj",
         "projectName": "SmartConnector",
-        "projectPath": "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\FlexingEdukit\\SmartConnector\\SmartConnector.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\SmartConnector\\SmartConnector.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\FlexingEdukit\\SmartConnector\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\UVC\\team4-mosquitto\\SmartConnector\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",

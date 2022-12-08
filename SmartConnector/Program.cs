@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿//#define socketmode
+
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
+using System.Net;
+using System.Threading;
 
 namespace SmartConnector.Edukit
 {
@@ -54,19 +58,6 @@ namespace SmartConnector.Edukit
                     mqttClient.ProtocolVersion = MqttProtocolVersion.Version_3_1_1;    // 기본값 3.1.1, 버전이 맞아야 연결된다.
                     byte code = mqttClient.Connect(Guid.NewGuid().ToString());
 
-#if socketmode
-                    string websocket = edgeConfigResult.WebSocketServerUrl;
-                    var query = new Dictionary<string, string>()
-                        {
-                            { "type", "EDGE" },
-                            { "id", edgeConfigResult.EdukitId }
-                        };
-                    var options = new Ecng.Net.SocketIO.Client.IO.Options();
-                    options.Query = query;
-                    ServerSocket = Ecng.Net.SocketIO.Client.IO.Socket(websocket, options);
-
-                    ServerSocket.Unhandled += ServerSocket_Unhandled;
-#endif
 
                     Console.WriteLine("##########################");
                     Console.WriteLine("Edukit Connection State : True");
@@ -89,26 +80,33 @@ namespace SmartConnector.Edukit
                 return Task.FromResult(true);
             }
 
-            private void ServerSocket_Unhandled(string arg1, object[] arg2)
+#if socketmode
+            private void ServerSocket_Unhandled(string arg1, object[] arg2)     //필요 없을지도?
             {
                 ServerSocket.Emit("joinRoom", edgeConfigResult.EdukitId);
             }
-
+#endif
             private void ConnectionStart(int DelayTime, XGTClass xGTClass, string ip, int port)
             {
                 xGTClass.Connect(ip, port);
 
-#if socketmode
-                ServerSocket.Emit("joinRoom", edgeConfigResult.EdukitId);
+                ////WebGL Response => PLC Request////
+                mqttClient.MqttMsgPublishReceived += PLCWrite;
+                string topic = edgeConfigResult.FrontId;
+                mqttClient.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
-                ServerSocket.On($"SEND{edgeConfigResult.EdukitId}", (msg) =>
+                void PLCWrite(object sender, MqttMsgPublishEventArgs e)
                 {
+                    string mes = Encoding.Default.GetString(e.Message);
+                    Console.WriteLine("Received Mes : " + mes);
+
                     XGTAddressData pAddress2 = new XGTAddressData();
                     XGTAddressData test1 = new XGTAddressData();
+                    dynamic test = JsonConvert.DeserializeObject<test>(mes.ToString());
+                    Console.WriteLine("Received Mes : " + test.tagId);
+                    Console.WriteLine("Received Mes : " + test.value);
 
-                    dynamic test = JsonConvert.DeserializeObject<test>(msg.ToString());
-
-                    if (test.tagId.Equals("1")) //start
+                    if (test.tagId.Equals("1"))  //start
                     {
                         if (test.value.Equals("0"))
                         {
@@ -226,9 +224,10 @@ namespace SmartConnector.Edukit
                             xGTClass.Write(XGT_DataType.Bit, pAddress2, XGT_MemoryType.SubRelay_M, 0);
                         }
                     }
-                });
-#endif
+                }
 
+
+                ////PLC Response => WebGL Request////
                 Dictionary<XGTAddressData, string> BitAddressList = new Dictionary<XGTAddressData, string>();
 
                 XGTAddressData Start = new XGTAddressData();                    //시작 M0000 bit
@@ -294,7 +293,7 @@ namespace SmartConnector.Edukit
                 No1_Action.Name = "No1_Action";
                 No1_Action.TagId = "3";
 
-                No2_Action.Address = "104";
+                No2_Action.Address = "104"; 
                 No2_Action.Name = "No2_Action";
                 No2_Action.TagId = "4";
 
@@ -526,6 +525,7 @@ namespace SmartConnector.Edukit
                                         newdata.value = true;
                                         edukitData.Add(newdata);
                                     }
+                                    Thread.Sleep(5);
                                 }
                             }
                             else if (address.Value == "P")
@@ -552,6 +552,7 @@ namespace SmartConnector.Edukit
                                         newdata.value = true;
                                         edukitData.Add(newdata);
                                     }
+                                    Thread.Sleep(5);
                                 }
                             }
                         }
@@ -575,6 +576,7 @@ namespace SmartConnector.Edukit
                                     newdata.value = data.ToString();
                                     edukitData.Add(newdata);
                                 }
+                                Thread.Sleep(5);
                             }
                             else if (address.Value == "C")
                             {
@@ -589,6 +591,7 @@ namespace SmartConnector.Edukit
                                     newdata.value = val.DataList[0].IntData.ToString();
                                     edukitData.Add(newdata);
                                 }
+                                Thread.Sleep(5);
                             }
                             else if (address.Value == "K")
                             {
@@ -613,6 +616,7 @@ namespace SmartConnector.Edukit
                                         edukitData.Add(newdata);
                                         edukitMqttData.Add(newdata);
                                     }
+                                    Thread.Sleep(5);
                                 }
                             }
                         }
@@ -627,10 +631,7 @@ namespace SmartConnector.Edukit
 
                         mqttData.Wrapper = edukitData;
 
-#if socketmode
-                        SocketIoData(edukitData);
-#endif
-                        MqttData(mqttData);
+                        WebGLWrite(mqttData);
 
                         if (edgeConfigResult.DebugType == "Debug")
                         {
@@ -664,23 +665,7 @@ namespace SmartConnector.Edukit
                 return;
             }
 
-            static Task<string> SocketIoData(List<EdukitNewdata> EduKitData)
-            {
-                string data = JsonConvert.SerializeObject(EduKitData, Formatting.Indented);
-
-                string EdukitID = edgeConfigResult.EdukitId;
-                try
-                {
-                    ServerSocket.Emit("create", EdukitID, data);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                }
-                return null;
-            }
-
-            static void MqttData(MqttData EduKitData)
+            static void WebGLWrite(MqttData EduKitData)
             {
                 string json = JsonConvert.SerializeObject(EduKitData, Formatting.Indented);
 
@@ -711,6 +696,7 @@ namespace SmartConnector.Edukit
             public string EdukitId { get; set; }
             public string EdukitIP { get; set; }
             public string EdukitPort { get; set; }
+            public string FrontId { get; set; }
             public string MqttBrokerIP { get; set; }
             public string MqttBrokerPort { get; set; }
             public string WebSocketServerUrl { get; set; }

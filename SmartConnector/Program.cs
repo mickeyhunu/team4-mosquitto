@@ -9,7 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
-using System.Net;
 using System.Threading;
 
 namespace SmartConnector.Edukit
@@ -94,7 +93,7 @@ namespace SmartConnector.Edukit
                     Console.WriteLine("Received Mes : " + mes);
 
                     XGTAddressData pAddress2 = new XGTAddressData();
-                    XGTAddressData test1 = new XGTAddressData();
+                    XGTAddressData test1 = new XGTAddressData();    //test 날리기
                     dynamic test = JsonConvert.DeserializeObject<test>(mes.ToString());
                     Console.WriteLine("Received Mes : " + test.tagId);
                     Console.WriteLine("Received Mes : " + test.value);
@@ -265,7 +264,7 @@ namespace SmartConnector.Edukit
                 XGTAddressData No3Chip = new XGTAddressData();                  // 3호기 칩 도착 P0000E bit
                 XGTAddressData VisionCmdMemory = new XGTAddressData();          // 비젼지령기억 M0001C bit
                 XGTAddressData No3DiceReading = new XGTAddressData();           // 주사위판독 C0004 WORD
-                XGTAddressData Emergency = new XGTAddressData();                // 비상정지 P0000F bit
+                XGTAddressData Belt = new XGTAddressData();                // 벨트 P00022 bit
                 XGTAddressData OutputLimit = new XGTAddressData();              // 생산량 리미트 D10000 WORD
                 XGTAddressData DiceValue = new XGTAddressData();                // 주사위값 D01100 WORD
                 XGTAddressData DiceComparisonValue = new XGTAddressData();      // 주사위 비교 숫자 D00150 WORD
@@ -410,9 +409,9 @@ namespace SmartConnector.Edukit
                 No3DiceReading.Name = "No3DiceReading";
                 No3DiceReading.TagId = "34";
 
-                Emergency.Address = "F";
-                Emergency.Name = "Emergency";
-                Emergency.TagId = "35";
+                Belt.Address = "22";
+                Belt.Name = "Belt";
+                Belt.TagId = "35";
 
                 OutputLimit.Address = "10000";
                 OutputLimit.Name = "OutputLimit";
@@ -476,7 +475,7 @@ namespace SmartConnector.Edukit
                 BitAddressList.Add(No3Chip, "P");
                 BitAddressList.Add(VisionCmdMemory, "M");
                 WordAddressList.Add(No3DiceReading, "C");
-                BitAddressList.Add(Emergency, "P");
+                BitAddressList.Add(Belt, "P");
                 WordAddressList.Add(OutputLimit, "D");
                 WordAddressList.Add(DiceValue, "D");
                 WordAddressList.Add(DiceComparisonValue, "D");
@@ -614,11 +613,11 @@ namespace SmartConnector.Edukit
                             }
                         }
 
-                        EdukitNewdata newdata2 = new EdukitNewdata();
-                        newdata2.name = "DataTime";
-                        newdata2.tagId = "0";
-                        newdata2.value = DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
-                        edukitData.Add(newdata2);
+                        EdukitNewdata newdata3 = new EdukitNewdata();
+                        newdata3.name = "DataTime";
+                        newdata3.tagId = "0";
+                        newdata3.value = DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
+                        edukitData.Add(newdata3);
 
                         MqttData mqttData = new MqttData();
 

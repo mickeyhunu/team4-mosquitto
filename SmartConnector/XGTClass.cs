@@ -218,6 +218,9 @@ namespace SmartConnector.Edukit
                 }
                 tcpSocket.Send(tcpFrame, 0, tcpFrame.Length, SocketFlags.None);
 
+
+                Delay(1);
+
                 var datassss = ByteToString(tcpFrame);
                 do
                 {
@@ -241,7 +244,6 @@ namespace SmartConnector.Edukit
 
                 return null;
             }
-            Delay(1);
 
             return vData;
         }

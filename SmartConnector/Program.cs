@@ -285,7 +285,7 @@ namespace SmartConnector.Edukit
                 No1_Action.Name = "No1_Action";
                 No1_Action.TagId = "3";
 
-                No2_Action.Address = "104"; 
+                No2_Action.Address = "104";
                 No2_Action.Name = "No2_Action";
                 No2_Action.TagId = "4";
 
@@ -517,7 +517,7 @@ namespace SmartConnector.Edukit
                                         newdata.value = true;
                                         edukitData.Add(newdata);
                                     }
-                                    Thread.Sleep(5);
+                                    Thread.Sleep(1);
                                 }
                             }
                             else if (address.Value == "P")
@@ -544,7 +544,7 @@ namespace SmartConnector.Edukit
                                         newdata.value = true;
                                         edukitData.Add(newdata);
                                     }
-                                    Thread.Sleep(5);
+                                    Thread.Sleep(1);
                                 }
                             }
                         }
@@ -568,7 +568,7 @@ namespace SmartConnector.Edukit
                                     newdata.value = data.ToString();
                                     edukitData.Add(newdata);
                                 }
-                                Thread.Sleep(5);
+                                Thread.Sleep(1);
                             }
                             else if (address.Value == "C")
                             {
@@ -583,7 +583,7 @@ namespace SmartConnector.Edukit
                                     newdata.value = val.DataList[0].IntData.ToString();
                                     edukitData.Add(newdata);
                                 }
-                                Thread.Sleep(5);
+                                Thread.Sleep(1);
                             }
                             else if (address.Value == "K")
                             {
@@ -591,13 +591,17 @@ namespace SmartConnector.Edukit
                                 int test = Int32.Parse(address.Key.Address);
                                 XGTAddressData q = new XGTAddressData();
                                 q.Address = (test + 1).ToString();
+                                Delay(1);
                                 XGTData val2 = xGTClass.Read(XGT_DataType.Word, q, XGT_MemoryType.KeepRelay_K, 0);
+
+                                Delay(1);
 
                                 if ((val1 != null && val1.DataList != null && val1.DataList.Count > 0) && (val2 != null && val2.DataList != null && val2.DataList.Count > 0))
                                 {
                                     int val22 = val2.DataList[0].IntData;
                                     long dWordVal = (val22 * 65536) + val1.DataList[0].IntData;
-                                    if (dWordVal >= 0)
+                                    //Console.WriteLine(dWordVal);
+                                    if (dWordVal != null)
                                     {
                                         EdukitNewdata newdata = new EdukitNewdata
                                         {
@@ -619,23 +623,28 @@ namespace SmartConnector.Edukit
                         newdata3.value = DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
                         edukitData.Add(newdata3);
 
-                        MqttData mqttData = new MqttData();
-
-                        mqttData.Wrapper = edukitData;
-
-                        WebGLWrite(mqttData);
-
-                        if (edgeConfigResult.DebugType == "Debug")
+                        if (edukitData.Count == 41)
                         {
-                            Console.Clear();
+                            MqttData mqttData = new MqttData();
 
-                            List<EdukitNewdata> SortedList = edukitData.OrderBy(x => Int32.Parse(x.tagId)).ToList();
+                            mqttData.Wrapper = edukitData;
 
-                            foreach (var data in SortedList)
+                            WebGLWrite(mqttData);
+
+                            if (edgeConfigResult.DebugType == "Debug")
                             {
-                                Console.WriteLine($"[{data.tagId}]{data.name} : {data.value}");
+                                Console.Clear();
+
+                                List<EdukitNewdata> SortedList = edukitData.OrderBy(x => Int32.Parse(x.tagId)).ToList();
+
+                                foreach (var data in SortedList)
+                                {
+                                    Console.WriteLine($"[{data.tagId}]{data.name} : {data.value}");
+                                }
                             }
+
                         }
+
                     }
                     catch (Exception ex)
                     {

@@ -58,102 +58,94 @@ Checkout [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9
 
 ## Packages
 ```C#
-.NET CORE == 3.1
-using uPLibrary.Networking.M2Mqtt == 1.1.0
+.NET CORE == 3.1  
+using uPLibrary.Networking.M2Mqtt == 1.1.0  
 ```
   
 ## .NET Core
 
 ### Installation
 This library is for C# Embedded Library.  
-You need to check out My Notion instead.
-After Installing, You can use them just by importing with commands
+You need to check out My Notion instead.  
+After Installing, You can use them just by importing with commands  
 Same applies to other packages  
   
-## uPLibrary.Networking.M2Mqtt
+## uPLibrary.Networking.M2Mqtt  
 
-### Installation
-This allows you to use Torch library, which means that you are now  
-available to Use Trained Yolo .pt Model
-
-```console
-> pip install torch>=1.7.0
-```  
+### Installation  
+[Installation](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#ce40c0ed5b9845f29710f1d97575e3ab)  
   
 ### Configuration
-To use yolo model and call the trained model successfully,  
-You need to specify your yolo model's path
+To use MQTT in C#, You need to specify HOST, PORT, PATH and TOPIC  
+Below shows you how I configurated in this Project  
 
-Below Shows how I specify My Yolo&Yolo model
-```Python
-...
-model_label = torch.hub.load('../yolov5', 'custom', path='../yolov5/runs/train/dices5/weights/last.pt', source='local') # Read Train Model
-...
+```C#
+int mqttport = Int32.Parse(edgeConfigResult.MqttBrokerPort);
+mqttClient = new MqttClient(edgeConfigResult.MqttBrokerIP, mqttport, false, null, null, MqttSslProtocols.TLSv1_2);
 ```
   
 ### Usage
-After reading yolo model via pytorch, You can use it via returned variable.
-```Python
-results = model_label(imgRGB)
-results = results.pandas().xyxy[0][['name','xmin','ymin','xmax','ymax']]
-
-dice = [0, 0, 0, 0]
-cup = [0, 0, 0, 0]
-
-for num, i in enumerate(results.values):
-  if i[0] == 'Dice' and dice[0] == 0 :                
-    dice = [int(i[1]), int(i[2]), int(i[3]), int(i[4])]
-  if i[0] == 'Cup' and cup[0] == 0 :
-    cup = [int(i[1]), int(i[2]), int(i[3]), int(i[4])]
-  if dice[0] != 0 and cup[0] != 0:
-    break
+After configuring MQTT broker, then you can Publish&Subscribe through TOPIC  
+  
+```C#
+mqttClient.MqttMsgPublishReceived += PLCWrite;
+string topic = edgeConfigResult.FrontId;
+mqttClient.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+...
+string json = JsonConvert.SerializeObject(EduKitData, Formatting.Indented);
+string data = json;  
+string topic = edgeConfigResult.EdukitId;
+try
+{
+  mqttClient.Publish(topic, Encoding.Default.GetBytes(data),
+  MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+}
+catch (Exception ex)
+{
+  Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+}
 ```
   
   
 # 4. Setting Configuration
-I have not used extra configuration file.
-So, there aren't much for you to configure
+Create your `.gitignore` file in `C:\Workspace`, then setup like below.  
+In `C:\Workspace\.gitignore`,  
   
-## Flask configuration
+```
+.vs/
+SmartConnector/EdgeConfigFile.json
+SmartConnector/bin
+SmartConnector/bin
+SmartConnector/obj
+SmartConnector/obj
+...       # default .gitignore for C#  
+```
+  
+## EdgeConfigFile.json configuration
 
-We have already discuss about Flask Configuration above.  
+We have already discuss about MQTT Configuration above.  
+Though, there are some additional configurations that need to be done.  
+Below code will show some data you need to configure  
 In `C:\Workspace\dev.py`,  
 
-```Python
-...  
-app = Flask(__name__)
-@app.route('/stream')
-...  
-app.run(host='0.0.0.0', port=3002)  #you can see your stream through `http://localhost/stream`
+```JSON
+"EdukitId": "Your_Subscribe_TOPIC",
+"EdukitIP": "Your_PLC_IP",
+"EdukitPort": "Your_PLC_Port",
+"FrontId": "Your_Publish_TOPIC",
+"MqttBrokerIP": "Your_Broker_IP",
+"MqttBrokerPort": "Your_Broker_Port",
+"DelayTime": "100",
+"DebugType": "Debug"
 ```
   
-Then, you can check your vision on http://(your IP)/stream
-  
-## Socket configuration
-  
-We have already discuss about Socket Configuration above.  
-In `C:\Workspace\lib\cam.py`,  
-```Python
-HOST = '192.168.0.120'  # Edukit Port
-PORT = 2004
-ADDR = (HOST,PORT)
-```
   
 # 5. Used Concept
-Most of the Concept are already specified in [Our Notion(Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#fda79f7cccda4e088c23260d622272f1).  
-I am going to write the Big concept I used in this project Approximately,
-Writing specifically Instead.
-
-## Yolo
-[Yolo Git](https://github.com/ultralytics/yolov5)  
-[Our Notion(Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#e8e36a7d3e494eef94265ebc1264daa0)
-
-## Image Pre-Processing
-especailly about ***Guassian Blur, Gray Filter, Sobel Filter, Canny Edge***  
-[Our Notion(Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#b4c2b136a9d2479aac508cf5c9a98d1e)
+There aren't much Idea&Concept We need to discuss on this Git.  
+Check [Notion(Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) instead.  
   
   
 # 6. Usage Example
   
-![1](https://user-images.githubusercontent.com/40204622/208363538-d8618519-d78c-46bd-a30a-0bfccab3f22a.PNG)
+![image](https://user-images.githubusercontent.com/40204622/208420612-9870a88c-88a1-4b4c-9f7d-438adec068fa.png)  
   

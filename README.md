@@ -38,52 +38,30 @@ Especially On Socket Connection Part.
 
 # 2. Develop Environment
 
-For : Windows(anaconda prompt ver3)  
-Used : Yolo, OpenCV, Flask, ETC  
-**You Must Refer [My Notion(in Kor)](https://www.notion.so/UVC-c36970dd6c884131b159ea837790db94) Together for Plugin Packages Description of This Project**  
+For : Windows(Visual Studio 2022), PLC(Edukit)  
+Used : .NET Core 3.1, MQTT, SocketI/O, ETC  
+**You Must Refer [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) Together for Plugin Packages Description of This Project**  
 
 ## Setup
-For Development OS, I used `Windows10(anaconda3)`.  
-Then, set your working space for python  
+For Development OS, I used `Windows10`.  
+Then, set your working space for C#  
 ```console
 > cd C:\Workspace
 ```
   
-## Installation
-You need to set up Yolov5
-Checkout [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#38e3ee19b7d34922bc082fc9921ff235) for Installation in Windows  
-You can also refer to [Yolov5 documents](https://github.com/ultralytics/yolov5),  
-which includes information about [Training Custom Dataset](https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data), [Roboflow](https://roboflow.com/?ref=ultralytics)
+## Installation & Create Project & Running Project
+You need to set up Visual Studio 2022
+Checkout [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) for Installation in Windows  
   
-## Activate Anaconda
-Create Your Project
-```console
-> conda create -n yolov5 python=3.9  
-> conda activate yolov5  
-```
-  
-## Running Project
-You can run your project via commands below
-
-### default(debug Mode)
-```console
-> python dev.py  
-```
   
 # 3. Getting Packages
 
 ## Packages
-```Python
-import cv2
-import torch
-from time import sleep
-
-from threading import Thread
-from socket import *  
-
-from flask import Flask  
-from flask import Response  
-from flask import stream_with_context 
+```C#
+.NET CORE == 3.1
+using Newtonsoft.Json == 13.0.1
+using uPLibrary.Networking.M2Mqtt == 1.1.0
+using Ecng.Net.SocketIO == 1.0.143
 ```
   
 ## OpenCV

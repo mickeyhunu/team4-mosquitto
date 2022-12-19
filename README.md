@@ -59,52 +59,18 @@ Checkout [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9
 ## Packages
 ```C#
 .NET CORE == 3.1
-using Newtonsoft.Json == 13.0.1
 using uPLibrary.Networking.M2Mqtt == 1.1.0
-using Ecng.Net.SocketIO == 1.0.143
 ```
   
-## OpenCV
+## .NET Core
 
 ### Installation
-The following allows you to use OpenCV library, 
-which is mainly about vision sensing  
-
-```console
-> pip install opencv-python>=4.1.1
-```  
+This library is for C# Embedded Library.  
+You need to check out My Notion instead.
+After Installing, You can use them just by importing with commands
+Same applies to other packages  
   
-### Configuration
-For this project, You need to setup your own camera.  
-Then, you need to check out which camera you are using from **Windows Device Manager**.  
-After checking which camera you are using, You can Open your camera through python  
-via below code.  
-```Python
-if cv2.ocl.haveOpenCL() :
-    cv2.ocl.setUseOpenCL(True)
-print('OpenCL : ', cv2.ocl.haveOpenCL())
-webcam = cv2.VideoCapture(0)
-```
-  
-### Usage
-After making sure that your camera is opened,  
-You can use variety of OpenCV functions.  
-Below code is some example of how I used OpenCV in this project
-```Python
-detector = cv2.SimpleBlobDetector_create(params)    #Detecting Blob
-...
-imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)     #Making RGB file to BGR for openCV
-...
-cv2.putText(imgRGB, 'Dice', (dice[0], dice[1]), cv2.FONT_HERSHEY_SIMPLEX, 2,(0, 255, 0), 2) #Putting Text
-cv2.rectangle(imgRGB, (dice[0], dice[1]), (dice[2], dice[3]), (0, 0, 255), 3)               #Drawing Rectangle
-...
-frame_blurred = cv2.GaussianBlur(dst, Gaussian_ksize, 1)      #Gaussian Blur Filter
-frame_gray = cv2.cvtColor(frame_blurred, cv2.COLOR_BGR2GRAY)    #Gray Filter
-frame_canny = cv2.Canny(frame_gray, canny_threshold_min, canny_threshold_max, apertureSize=3, L2gradient=True)  #Canny Edge
-...
-```
-  
-## Torch
+## uPLibrary.Networking.M2Mqtt
 
 ### Installation
 This allows you to use Torch library, which means that you are now  
@@ -142,106 +108,6 @@ for num, i in enumerate(results.values):
   if dice[0] != 0 and cup[0] != 0:
     break
 ```
-  
-## Flask
-
-### Installation
-This allows you to open route server via python.
-I used it in this project to stream my Yolo-Applied-Vision.  
-
-```console
-> pip install flask>=2.2.2  
-```  
-
-### Configuration
-To Use Flask Model, You need to setUp both Host and Port.  
-Here is the following to setup host and port using flask
-  
-```Python
-...  
-app = Flask(__name__)
-@app.route('/stream')
-...  
-app.run(host='0.0.0.0', port=3002)  #you can see your stream through `http://localhost/stream`
-```
-  
-### Usage
-After setting up, you can stream your vision,  
-using python project as server.  
-Below you can see some example how I used in this project
-```Python
-def stream():    
-  try :
-    return Response(
-      stream_with_context( streaming() ),
-      mimetype='multipart/x-mixed-replace; boundary=frame' )
-  except Exception as e :
-    print('stream error : ',str(e))
-
-def streaming():
-  try : 
-    while webcam.isOpened():
-      success, frame = webcam.read()
-      if not success:
-        break
-      else:
-        frame = stream_yolo.yolo(frame, model_label)
-        ret, buffer = cv2.imencode('.jpg', frame)
-        frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-          b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-  except GeneratorExit :
-    print( 'disconnected stream' )
-```
-  
-## Thread, Time, Socket
-
-### Installation
-This packages are embedded libraries in Python.  
-  
-```Python
-from socket import *
-from threading import Thread
-from time import sleep
-```  
-  
-### Configuration
-There Aren't Much to Configure.  
-However, you do need to configure for successful socket connection.  
-```Python
-HOST = '192.168.0.120'  # Edukit Port
-PORT = 2004
-ADDR = (HOST,PORT)
-```
-  
-### Usage  
-Below each will show how I used those embedded library in this project.  
-  
-#### Thread  
-```Python  
-def server():
-...
-t=Thread(target=server, daemon=True)
-t.start()
-...
-```  
-  
-#### Time  
-```Python  
-...
-sleep(1)  #Because PLC cannot receive data frequently, it needs guaranteed 1 sec delay  
-```    
-  
-#### Socket  
-```Python  
-...
-clientSocket = socket(AF_INET, SOCK_STREAM)
-clientSocket.connect(ADDR)
-print('Connection PLC Success!')
-clientSocket.send(socketTxData + num_little)
-clientSocket.close()
-print('close PLC Success!')
-```  
   
   
 # 4. Setting Configuration

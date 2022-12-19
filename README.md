@@ -50,7 +50,7 @@ Then, set your working space for C#
 ```
   
 ## Installation & Create Project & Running Project
-You need to set up Visual Studio 2022
+You need to set up Visual Studio 2022  
 Checkout [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) for Installation in Windows  
   
   

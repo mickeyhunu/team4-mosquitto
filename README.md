@@ -2,21 +2,18 @@
 
 # 0. Abstract
 **Notion : [UVC Team 4 Project MQTT Smart Connector](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3)**  
-**This project is about UVC Team Project**  
-**This project is to implement Smart Factory Management System.**  
-This document only notes how I used Smart Connector C# Program   
-to connect with PLC Edukit  
+**This UVC Team Project aims to build and implement Smart Factory Management System.**
+**This document only notes on how I used a Smart Connector C# Program to connect to a PLC Edukit.**
 
-I Referenced most of the code from UVC,
-Especially On Socket Connection Part.
+I referred most of the codes from UVC, especially on Socket Connection.
 
 ## Index  
 
 [**1. File Structure**](https://github.com/shlee9605/team4-mosquitto#1-file-structure)  
-[**2. Develop Environment**](https://github.com/shlee9605/team4-mosquitto#2-develop-environment)  
+[**2. Development Environment**](https://github.com/shlee9605/team4-mosquitto#2-develop-environment)  
 [**3. Getting Packages**](https://github.com/shlee9605/team4-mosquitto#3-getting-packages)  
 [**4. Setting Configuration**](https://github.com/shlee9605/team4-mosquitto#4-setting-configuration)  
-[**5. Used Concept**](https://github.com/shlee9605/team4-mosquitto#5-used-concept)  
+[**5. Concepts Used**](https://github.com/shlee9605/team4-mosquitto#5-used-concept)  
 [**6. Usage Example**](https://github.com/shlee9605/team4-mosquitto#6-usage-example)  
   
   
@@ -36,22 +33,22 @@ Especially On Socket Connection Part.
 └── FlexingEdukit           # Solution file
 ```
 
-# 2. Develop Environment
+# 2. Development Environment
 
-For : Windows(Visual Studio 2022), PLC(Edukit)  
-Used : .NET Core 3.1, MQTT, SocketI/O, ETC  
-**You Must Refer [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) Together for Plugin Packages Description of This Project**  
+Worked on: Windows(Visual Studio 2022), PLC(Edukit)  
+Used: .NET Core 3.1, MQTT, SocketI/O, ETC  
+**You would need to refer to [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) for the Plugin Packages Description of this Project.**  
 
 ## Setup
 For Development OS, I used `Windows10`.  
-Then, set your working space for C#  
+First, set up a working space for C#.
 ```console
 > cd C:\Workspace
 ```
   
-## Installation & Create Project & Running Project
-You need to set up Visual Studio 2022  
-Checkout [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) for Installation in Windows  
+## Installation & Create Project & Run Project
+You need to set the working environment up on Visual Studio 2022.  
+Check [My Notion(in Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) out on how to install it on Windows.  
   
   
 # 3. Getting Packages
@@ -65,10 +62,10 @@ using uPLibrary.Networking.M2Mqtt == 1.1.0
 ## .NET Core
 
 ### Installation
-This library is for C# Embedded Library.  
-You need to check out My Notion instead.  
-After Installing, You can use them just by importing with commands  
-Same applies to other packages  
+This library is for the C# Embedded Library.  
+Check My Notion for procedures.
+After installing it, you can use them just by importing it with commands.
+The same applies to other packages.
   
 ## uPLibrary.Networking.M2Mqtt  
 
@@ -76,8 +73,8 @@ Same applies to other packages
 [Installation](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#ce40c0ed5b9845f29710f1d97575e3ab)  
   
 ### Configuration
-To use MQTT in C#, You need to specify HOST, PORT, PATH and TOPIC  
-Below shows you how I configurated in this Project  
+To use MQTT in C#, you would need to specify HOST, PORT, PATH and TOPIC.  
+Below shows how I did for this Project.  
 
 ```C#
 int mqttport = Int32.Parse(edgeConfigResult.MqttBrokerPort);
@@ -85,7 +82,7 @@ mqttClient = new MqttClient(edgeConfigResult.MqttBrokerIP, mqttport, false, null
 ```
   
 ### Usage
-After configuring MQTT broker, then you can Publish&Subscribe through TOPIC  
+After configuring the MQTT broker, you can Publish & Subscribe through TOPIC.  
   
 ```C#
 mqttClient.MqttMsgPublishReceived += PLCWrite;
@@ -108,8 +105,8 @@ catch (Exception ex)
   
   
 # 4. Setting Configuration
-Create your `.gitignore` file in `C:\Workspace`, then setup like below.  
-In `C:\Workspace\.gitignore`,  
+Create a `.gitignore` file in `C:\Workspace`.
+Then set your files as follows in `C:\Workspace\.gitignore`.
   
 ```
 .vs/
@@ -123,10 +120,9 @@ SmartConnector/obj
   
 ## EdgeConfigFile.json configuration
 
-We have already discuss about MQTT Configuration above.  
-Though, there are some additional configurations that need to be done.  
-Below code will show some data you need to configure  
-In `C:\Workspace\dev.py`,  
+We have already discussed about MQTT Configuration above.  
+Though, there are some additional configurations that are needed to be done.  
+Below code will show some data you need to configure in `C:\Workspace\dev.py`,  
 
 ```JSON
 "EdukitId": "Your_Subscribe_TOPIC",
@@ -140,9 +136,9 @@ In `C:\Workspace\dev.py`,
 ```
   
   
-# 5. Used Concept
-There aren't much Idea&Concept We need to discuss on this Git.  
-Check [Notion(Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) instead.  
+# 5. Concepts Used
+There aren't much Idea & Concepts used here that are needed to be mentioned here.
+Check [Notion(Kor)](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3) out instead.  
   
   
 # 6. Usage Example

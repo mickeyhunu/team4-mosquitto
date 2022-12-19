@@ -1,32 +1,39 @@
 # team4-mosquitto
 
 # 0. Abstract
-**Notion : [UVC Team 4 Project Yolo Socket Stream](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#778988f111d4416abeb34f7d15eb9f94)**  
+**Notion : [UVC Team 4 Project MQTT Smart Connector](https://www.notion.so/1d50eee57be542fd8435cf5088dd9936#4a7257e9d60b4ae6b9ff57869f8b05f3)**  
 **This project is about UVC Team Project**  
 **This project is to implement Smart Factory Management System.**  
-This document only notes how I used Yolo Model & Socket System & Flask to apply  
-AI Model & Socket Connection with PLC & Stream on HTTP Server  
+This document only notes how I used Smart Connector C# Program   
+to connect with PLC Edukit  
 
 I Referenced most of the code from UVC,
 Especially On Socket Connection Part.
 
 ## Index  
 
-[**1. File Structure**](https://github.com/shlee9605/team4-yolosocket#1-file-structure)  
-[**2. Develop Environment**](https://github.com/shlee9605/team4-yolosocket#2-Develop-Environment)  
-[**3. Getting Packages**](https://github.com/shlee9605/team4-yolosocket#3-Getting-Packages)  
-[**4. Setting Configuration**](https://github.com/team4-yolosocketmd#4-Setting-Configuration)  
-[**5. Used Concept**](https://github.com/shlee9605/team4-yolosocket#5-Used-Concept)  
-[**6. Usage Example**](https://github.com/shlee9605/team4-yolosocket#6-Usage-Example)  
+[**1. File Structure**](https://github.com/shlee9605/team4-mosquitto#1-file-structure)  
+[**2. Develop Environment**](https://github.com/shlee9605/team4-mosquitto#2-develop-environment)  
+[**3. Getting Packages**](https://github.com/shlee9605/team4-mosquitto#3-getting-packages)  
+[**4. Setting Configuration**](https://github.com/shlee9605/team4-mosquitto#4-setting-configuration)  
+[**5. Used Concept**](https://github.com/shlee9605/team4-mosquitto#5-used-concept)  
+[**6. Usage Example**](https://github.com/shlee9605/team4-mosquitto#6-usage-example)  
   
   
 # 1. File Structure
 
 ```
 .
-└── dev.py        # Main
-    ├── cam.py    # Socket Sending Camera
-    └── stream.py # Streaming Camera
+├── SmartConnector          
+│   ├── Program.cs          # Main Program
+│   ├── XGTAddressData.cs   # XGT Class Address data
+│   ├── XGTClass.cs         # XGT Class
+│   ├── XGTData.cs          # XGT Class Data
+│   ├── SmartConnector      # project file
+│   └── EdgeConfigFile.json # config
+├── .gitignore
+├── README
+└── FlexingEdukit           # Solution file
 ```
 
 # 2. Develop Environment
